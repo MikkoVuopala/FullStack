@@ -1,0 +1,4 @@
+Selain -> palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+Palvelin -> selain: Status code 201
+
+Selaimessa tapahtuman käsittelijä kutsuu metodia e.preventDefault(), jotta oletusarvoinen lomakkeen lähetys estetään ja sivua ei jouduta uudelleen lataamaan. Tämän jälkeen tapahtumankäsittelijä luo muistiinpanon ja lisää sen muistiinpanot listalle komennolla notes.push(note), piirtää ruudun sisällön eli muistiinpanojen listan uudelleen ja lähettää uuden muistiinpanon palvelimelle.
