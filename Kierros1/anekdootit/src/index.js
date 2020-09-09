@@ -5,7 +5,7 @@ const Button = ({onClick, text}) => (<button onClick = {onClick}>{text}</button>
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
-
+  const [maxvotes, findMax] = useState(0)
   const [points, addPoints] = useState(Array(6).fill(0))
 
   const buttonClick = () => {
@@ -16,15 +16,19 @@ const App = (props) => {
     const copy = [...points]
     copy[selected] += 1
     addPoints(copy)
+    findMax(copy.indexOf(Math.max(...copy)))
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {props.anecdotes[selected]}
       <p>This anecdote has {points[selected]} votes</p>
       <br></br>
       <Button onClick = {buttonClick} text = 'Random Anecdote'/>
       <Button onClick = {voteClick} text = 'Vote'/>
+      <h2>Anecdote with the most points</h2>
+      {props.anecdotes[maxvotes]}
     </div>
   )
 }
