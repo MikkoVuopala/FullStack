@@ -4,6 +4,19 @@ import ReactDOM from 'react-dom'
 let counter = 0
 let posCounter = 0
 
+const Statistics = (props) => {
+  return (
+    <div>
+    <p>Good: {props.good}</p>
+    <p>Neutral: {props.neutral}</p>
+    <p>Bad: {props.bad}</p>
+    <p>All: {props.all}</p>
+    <p>Average: {props.average}</p>
+    <p>Positive: {props.pos + ' %'}</p>
+    </div>
+  )
+}
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
@@ -38,12 +51,14 @@ const App = () => {
       <button onClick = {goodClick}>Good :)</button>
       <button onClick = {neutralClick}>Neutral</button>
       <button onClick = {badClick}>Bad :(</button>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>All: {all}</p>
-      <p>Average: {average}</p>
-      <p>Positive: {pos + ' %'}</p>
+      <Statistics
+        good = {good}
+        neutral = {neutral}
+        bad = {bad}
+        all = {all}
+        average = {average} 
+        pos = {pos}
+      />
     </div>
   )
 }
