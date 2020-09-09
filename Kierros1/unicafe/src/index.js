@@ -5,6 +5,14 @@ let counter = 0
 let posCounter = 0
 
 const Statistics = (props) => {
+  if (props.all === 0) {
+    return (
+      <div>
+        <p>No feedback given.</p>
+      </div>
+    )
+  }  
+
   return (
     <div>
     <p>Good: {props.good}</p>
@@ -51,6 +59,8 @@ const App = () => {
       <button onClick = {goodClick}>Good :)</button>
       <button onClick = {neutralClick}>Neutral</button>
       <button onClick = {badClick}>Bad :(</button>
+      <br></br>
+      <h2>Statistics</h2>
       <Statistics
         good = {good}
         neutral = {neutral}
