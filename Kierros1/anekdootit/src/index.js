@@ -29,6 +29,7 @@ const App = (props) => {
       <Button onClick = {voteClick} text = 'Vote'/>
       <h2>Anecdote with the most points</h2>
       {props.anecdotes[maxvotes]}
+      <p>{points[maxvotes]} votes</p>
     </div>
   )
 }
