@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
+import axios from 'axios'
 
 const SubmitForms = (props) => {
   return (
@@ -32,7 +33,7 @@ const ShowPersons = (props) => {
     <div>
       {
         props.persons.map(p =>
-          <p key={p.name}>{p.name} {p.phoneNumber}</p>
+          <p key={p.name}>{p.name} {p.number}</p>
         )
       }
     </div>
@@ -40,20 +41,29 @@ const ShowPersons = (props) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', 
-      phoneNumber: '040-1234567'}
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [r, setR] = useState(persons)
 
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log(response.data)
+        setPersons(response.data)
+        setR(response.data)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons')
+
   const addName = (event) => {
     event.preventDefault()
     const nameObject = {
       name: newName,
-      phoneNumber: newNumber
+      number: newNumber
     }
     
     if (persons.some(p => p.name === newName)) {
