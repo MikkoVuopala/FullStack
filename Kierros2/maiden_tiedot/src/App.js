@@ -21,7 +21,7 @@ const Show = (props) => {
       <div>
         {
           props.countries.map(x =>
-            <p key = {x.name}>{x.name}</p>
+            <p key = {x.name}>{x.name} <button onClick={props.bClick} value={x.name}>show</button></p>
           )
         }
       </div>
@@ -73,11 +73,16 @@ const App = () => {
     setFC(countries.filter(x => x.name.toLowerCase().includes(event.target.value.toLowerCase())))
     console.log(fCountries.length)
   } 
+
+  const handleClick = (event) => {
+    setFC(countries.filter(x => x.name.toLowerCase().includes(event.target.value.toLowerCase())))
+    console.log(fCountries.length)
+  }
   
   return (
     <div>
       <Filter value = {filter} onChange = {handleSearch}/>
-      <Show countries = {fCountries}/>
+      <Show countries = {fCountries} bClick = {handleClick}/>
     </div>
   )
 }
