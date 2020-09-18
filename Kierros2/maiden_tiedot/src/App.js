@@ -38,7 +38,7 @@ const Show = (props) => {
             <p key = {x.name}>{x.name}</p>
           )
         }
-        <img src = {props.countries[0].flag} alt = "Flag"></img>
+        <img src = {props.countries[0].flag} alt = "Flag" width = "200" height = "auto"></img>
       </div>
     )
   } else {
