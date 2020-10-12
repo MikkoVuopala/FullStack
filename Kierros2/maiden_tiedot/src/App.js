@@ -10,6 +10,7 @@ const Filter = ({value, onChange}) => {
 }
 
 const Show = (props) => {
+  console.log(props.w)
   if (props.countries.length > 10) {
     return (
       <div>
@@ -27,6 +28,7 @@ const Show = (props) => {
       </div>
     )
   } else if (props.countries.length === 1) {
+    //setCapital(props.countries[0].name)
     return (
       <div>
         <h3>{props.countries[0].name}</h3>
@@ -39,6 +41,10 @@ const Show = (props) => {
           )
         }
         <img src = {props.countries[0].flag} alt = "Flag" width = "200" height = "auto"></img>
+        <h4>Weather in {props.countries[0].capital}</h4>
+        <p>temperature: {props.w['main']['temp']} celcius</p>
+        <img src = {props.w['weather']['icon']} alt = "WeatherIcon" width = "70" height = "auto"></img>
+        <p>wind: {props.w['wind']['speed']} m/s, direction {props.w['wind']['deg']}</p>
       </div>
     )
   } else {
@@ -55,7 +61,11 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
   const [fCountries, setFC] = useState([])
+  const [weather, setWeather] = useState({})
+  const [capital, setCapital] = useState('')
   
+  //const api_key = process.env.REACT_APP_API_KEY
+
   useEffect(() => {
     console.log('effect')
     axios
@@ -67,11 +77,22 @@ const App = () => {
       })
   }, [])
 
-  const handleSearch = (event) => {
-    console.log(event.target.value)
-    setFilter(event.target.value)
-    setFC(countries.filter(x => x.name.toLowerCase().includes(event.target.value.toLowerCase())))
-    console.log(fCountries.length)
+  useEffect(() => {
+    axios
+      .get('https://api.openweathermap.org/data/2.5/weather?q=' + capital + '&units=metric&appid=' + process.env.REACT_APP_API_KEY)
+      .then(response => {
+        console.log(response.data)
+        setWeather(response.data['main'])
+      })
+  }, [capital])
+
+  function handleSearch(event) {
+    console.log(event.target.value);
+    setFilter(event.target.value);
+    setFC(countries.filter(x => x.name.toLowerCase().includes(event.target.value.toLowerCase())));
+    if(countries.filter(x => x.name.toLowerCase().includes(event.target.value.toLowerCase())).length === 1) {
+      setCapital(countries.filter(x => x.name.toLowerCase().includes(event.target.value.toLowerCase()))[0])
+    }
   } 
 
   const handleClick = (event) => {
@@ -82,7 +103,7 @@ const App = () => {
   return (
     <div>
       <Filter value = {filter} onChange = {handleSearch}/>
-      <Show countries = {fCountries} bClick = {handleClick}/>
+      <Show countries = {fCountries} bClick = {handleClick} w = {weather}/>
     </div>
   )
 }
