@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const SubmitForms = (props) => {
   return (
@@ -49,12 +49,12 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log(response.data)
-        setPersons(response.data)
-        setR(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        console.log(initialPersons)
+        setPersons(initialPersons)
+        setR(initialPersons)
       })
   }, [])
   console.log('render', persons.length, 'persons')
@@ -72,11 +72,11 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     } else {
-      axios
-        .post('http://localhost:3001/persons', nameObject)
-        .then(response => {
-          setPersons(persons.concat(nameObject))
-          setR(persons.concat(nameObject))
+      personService
+        .create
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setR(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
         })
