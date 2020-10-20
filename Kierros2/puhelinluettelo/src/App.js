@@ -33,9 +33,23 @@ const ShowPersons = (props) => {
     <div>
       {
         props.persons.map(p =>
-          <p key={p.name}>{p.name} {p.number}</p>
+          <p key={p.name}>{p.name} {p.number} 
+          <button onClick={props.delName} value={p.id}>delete</button> 
+          </p>
         )
       }
+    </div>
+  )
+}
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
     </div>
   )
 }
@@ -46,6 +60,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [r, setR] = useState(persons)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -73,13 +88,39 @@ const App = () => {
       setNewNumber('')
     } else {
       personService
-        .create
+        .create(nameObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           setR(persons.concat(returnedPerson))
+          setErrorMessage(
+            `'${newName}' was added to the phonebook!`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
           setNewName('')
           setNewNumber('')
         })
+    }
+  }
+
+  const delName = (event) => {
+    event.preventDefault()
+    const targetID = event.target.value
+    const targetName = persons.find(p => p.id === parseInt(targetID)).name
+    if (window.confirm(`Delete ${targetName}?`)) {
+    personService
+      .del(targetID)
+      .then(returnedStuff => {
+        setPersons(persons.filter(x => x !== returnedStuff))
+        setR(persons.filter(x => x !== returnedStuff))
+        setErrorMessage(
+          `'${targetName}' was removed from the phonebook!`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
     }
   }
 
@@ -103,7 +144,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <Notification message={errorMessage} />
       <Filters hfc = {handleFilterChange} filter = {filter}/>
       <h3>Add a new</h3>
       <SubmitForms
@@ -116,6 +157,7 @@ const App = () => {
       <h2>Numbers</h2>
       <ShowPersons
       persons = {r}
+      delName = {delName}
       />
     </div>
     
