@@ -107,13 +107,13 @@ const App = () => {
   const delName = (event) => {
     event.preventDefault()
     const targetID = event.target.value
-    const targetName = persons.find(p => p.id === parseInt(targetID)).name
+    const targetName = persons.find(p => p.id === targetID).name
     if (window.confirm(`Delete ${targetName}?`)) {
     personService
       .del(targetID)
       .then(returnedStuff => {
-        setPersons(persons.filter(x => x !== returnedStuff))
-        setR(persons.filter(x => x !== returnedStuff))
+        setPersons(persons.filter(x => x.name !== returnedStuff))
+        setR(persons.filter(x => x.name !== returnedStuff))
         setErrorMessage(
           `'${targetName}' was removed from the phonebook!`
         )
